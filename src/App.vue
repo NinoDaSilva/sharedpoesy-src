@@ -68,6 +68,10 @@ export default {
           .requestVerification(document.getElementById("email").value);
       }
     },
+    async logout() {
+      await pb.authStore.clear();
+      document.getElementById("status").innerHTML = "You are now logged out";
+    },
   },
 };
 </script>
