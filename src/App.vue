@@ -33,7 +33,7 @@ import PocketBase from "pocketbase";
 <script>
 var pocketbase_ip = "";
 if (import.meta.env.MODE === "production")
-  pocketbase_ip = "http://193.168.145.101";
+  pocketbase_ip = "https://sharedpoesy.nino-da-silva.fr";
 else pocketbase_ip = "http://127.0.0.1:8090";
 const pb = new PocketBase(pocketbase_ip);
 
@@ -72,6 +72,16 @@ export default {
       await pb.authStore.clear();
       document.getElementById("status").innerHTML = "You are now logged out";
     },
+    /*
+    async add() {
+      const record = await pb.collection("poems").create({
+        title: "good year",
+        content: "how a nice year",
+        private: false,
+        email:currentUser.email
+      });
+    },*/
+    //this method allows the already registred user to log in the system.
   },
 };
 </script>
