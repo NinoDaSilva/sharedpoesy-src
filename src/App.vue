@@ -1,7 +1,7 @@
 <script setup>
-import SignIn from "./components/SignIn.vue";
-import FamousPoets from "./components/FamousPoets.vue";
-import PocketBase from "pocketbase";
+  import SignIn from "./components/SignIn.vue";
+  import FamousPoets from "./components/FamousPoets.vue";
+  import PocketBase from "pocketbase";
 </script>
 
 <template>
@@ -27,6 +27,7 @@ import PocketBase from "pocketbase";
       <button v-on:click="register()">Email SignUp</button>
       <button v-on:click="login()">Email SignIn</button>
       <button v-on:click="googlelogin()">Google SignIn</button>
+      <button v-on:click="githublogin()">GitHub SignIn</button>
       <p><label id="status"> You are not yet connected </label><br /></p>
     </div>
     <div class="hidden" id="addPoem">
@@ -146,6 +147,16 @@ export default {
         document.getElementById("addPoem").style.visibility = "visible";
       }
     },
+    async githublogin() {
+      await pb.collection("users").authWithOAuth2({ provider: "github" });
+      if (pb.authStore.isValid) {
+        document.getElementById("status").innerHTML = "You are now logged in";
+        connected = true;
+        currentUser = pb.authStore.model;
+        document.getElementById("signOut").style.visibility = "hidden";
+        document.getElementById("addPoem").style.visibility = "visible";
+      }
+    },
     async createPoem() {
       const record = await pb.collection("poems").create({
         title: document.getElementById("title").value,
@@ -176,38 +187,10 @@ export default {
     //document.getElementById('poemcontent').value=
     //document.getElementById('poemillustration').src=
   },
-};
+}
 </script>
 
-<style>
-@import "./assets/base.css";
-
-header .hidden {
-  visibility: hidden;
-  overflow: hidden;
-  display: flex;
-  display: inline-block;
-  place-items: flex-start;
-  flex-wrap: wrap;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-  font-weight: normal;
-}
-
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
+<style scoped>
 a,
 .green {
   text-decoration: none;
