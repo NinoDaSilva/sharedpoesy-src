@@ -25,6 +25,8 @@ import PocketBase from "pocketbase";
       <label>password: </label><br />
       <input type="password" required id="passwd" /><br />
       <button v-on:click="login()">Sign In</button>
+      <button v-on:click="loginWithGoogle()">Sign In with Google</button>
+      <button v-on:click="loginWithGitHub()">Sign In with GitHub</button>
       <button v-on:click="add()">Add</button>
       <p><label id="status"> You are not yet connected </label><br /></p>
     </div>
