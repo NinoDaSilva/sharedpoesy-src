@@ -191,6 +191,34 @@ export default {
 </script>
 
 <style>
+@import "./assets/base.css";
+
+header .hidden {
+  visibility: hidden;
+  overflow: hidden;
+  display: flex;
+  display: inline-block;
+  place-items: flex-start;
+  flex-wrap: wrap;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+}
+
+header {
+  line-height: 1.5;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
 a,
 .green {
   text-decoration: none;
