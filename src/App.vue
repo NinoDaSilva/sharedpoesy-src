@@ -16,15 +16,11 @@ import PocketBase from "pocketbase";
     <div class="wrapper" id="signOut">
       <div><SignIn msg="User, please sign in !" /></div>
       <label>email: </label><br />
-      <input
-        type="email"
-        required
-        id="email"
-        placeholder="username@domain.tld"
-      /><br />
+      <input type="email" required id="email" placeholder="username@domain.tld"/>
+      <br/>
       <label>password: </label><br />
       <input type="password" required id="passwd" /><br />
-      <button v-on:click="login()">Sign In</button>
+      <button v-on:click="login(email, passwd)">Sign In</button>
       <button v-on:click="loginWithGoogle()">Sign In with Google</button>
       <button v-on:click="loginWithGitHub()">Sign In with GitHub</button>
       <button v-on:click="add()">Add</button>
@@ -47,9 +43,9 @@ export default {
   methods: {
     //this method allows a new user to sign up the system. Once done, the user receives an email
     //asking for account validation. Once the validation made the user is added to the system
-    async login() {
+    async login(email, passwd) {
       try {
-        await pb.collection('users').authWithPassword();
+        await pb.collection('users').authWithPassword(email, passwd);
         if (pb.authStore.isValid) {
           // Authentification réussie avec un email/mot de passe
           document.getElementById("status").innerHTML = "You are now logged in with email and password";
