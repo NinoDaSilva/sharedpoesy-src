@@ -16,12 +16,8 @@
     <div class="wrapper" id="signOut">
       <div><SignIn msg="Poet ! Tell us who you are !" /></div>
       <label>email: </label><br />
-      <input
-        type="email"
-        required
-        id="email"
-        placeholder="username@domain.tld"
-      /><br />
+      <input type="email" required id="email" placeholder="username@domain.tld"/>
+      <br/>
       <label>password: </label><br />
       <input type="password" required id="passwd" /><br />
       <button v-on:click="register()">Email SignUp</button>
@@ -34,54 +30,31 @@
       <div><SignIn msg="Write your poem !" /></div>
       <h3>The poem remains private, until you make it public</h3>
       <label>Poem's title</label><br />
-      <input
-        type="text"
-        required
-        name="title"
-        id="title"
-        placeholder="edit me"
-      /><br />
+      <input type="text" required name="title" id="title" placeholder="edit me"/>
+      <br />
       <label>Poem's content</label><br />
-      <textarea
-        required
-        name="content"
-        id="content"
-        placeholder="edit me"
-        rows="10"
-        cols="50"
-      >
+      <textarea required name="content" id="content" placeholder="edit me" rows="10" cols="50">
 Your poem here ...
       </textarea>
       <br />
       <label>Illustration: </label>
 
-      <input
-        type="file"
-        id="file"
-        name="file"
-        placeholder="my file"
-        accept="image/png, image/jpeg"
-      /><br />
+      <input type="file" id="file" name="file" placeholder="my file" accept="image/png, image/jpeg"/>
+      <br />
       <!--<img id="illustration" src="./assets/null.png" alt="poem illustration" width="75" height="75"/><br>-->
       <input type="checkbox" id="notpublic" value="true" />
       <label>Private poem</label>
       <br /><button v-on:click="createPoem()">Add the poem</button>
       <button v-on:click="fetchPoems()">List of poems</button><br />
-      <label
-        for="poemtitle"
-        id="poemtitle"
+      <label for="poemtitle" id="poemtitle"
         style="color: teal; font-weight: 500"
       >
         ...
       </label>
-      <img
-        id="poemillustration"
-        src="./assets/null.jpg"
-        alt="poem illustration"
-        width="75"
-        height="75"
+      <img id="poemillustration" src="./assets/null.jpg" alt="poem illustration" width="75" height="75"
         style="background-color: gray"
-      /><br />
+      />
+      <br />
       <textarea id="poemcontent" readonly rows="10" cols="50"> ... </textarea>
       <br />
       <button v-on:click="nextPoem()">Next poem</button><br />
@@ -164,17 +137,25 @@ export default {
         private: document.getElementById("notpublic").value,
         email: currentUser.email,
         illustration: document.getElementById("file").files[0],
+        langue: document.getElementById("langue").value,
       });
     },
     async fetchPoems() {
       //call a request filtering all accessible poems
+      let nbrPoems = 0;
+      let index = 0;
+      const records = await pb.collection("poems").request({ filter: { private: false } });
       //extract the number of readable poems
+      nbrPoems = records.length;
       //if the number of readable poems is not null
-      //then display the first one
-      //      document.getElementById('poemtitle').innerHTML=
-      //      document.getElementById('poemcontent').value=
-      //      document.getElementById('poemillustration').src=
-      //store the indexof the currently displayed poem
+      if(nbrPoems > 0) {
+        //then display the first one
+        document.getElementById('poemtitle').innerHTML=title;
+        document.getElementById('poemcontent').value=content;
+        document.getElementById('poemillustration').src=illustration;
+        //store the indexof the currently displayed poem
+        index = index(records);
+      }
     },
     //this method allows the already registred user to log in the system.
   },
