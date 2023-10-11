@@ -49,7 +49,7 @@ export default {
     //asking for account validation. Once the validation made the user is added to the system
     async login(email, password) {
       try {
-        await pb.auth.login(email, password);
+        await pb.collection('users').authWithPassword(email, password);
         if (pb.authStore.isValid) {
           // Authentification réussie avec un email/mot de passe
           document.getElementById("status").innerHTML = "You are now logged in with email and password";
@@ -62,7 +62,7 @@ export default {
     },
     async loginWithGoogle() {
       try {
-        await pb.auth.loginWithOAuth2({ provider: "google" });
+        await pb.collection('users').loginWithOAuth2({ provider: "google" });
         if (pb.authStore.isValid) {
           // Authentification réussie avec Google
           document.getElementById("status").innerHTML = "You are now logged in with Google";
@@ -75,7 +75,7 @@ export default {
     },
     async loginWithGitHub() {
       try {
-        await pb.auth.loginWithOAuth2({ provider: "github" });
+        await pb.collection('users').loginWithOAuth2({ provider: "github" });
         if (pb.authStore.isValid) {
           // Authentification réussie avec GitHub
           document.getElementById("status").innerHTML = "You are now logged in with GitHub";
