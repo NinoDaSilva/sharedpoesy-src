@@ -45,14 +45,46 @@ export default {
   methods: {
     //this method allows a new user to sign up the system. Once done, the user receives an email
     //asking for account validation. Once the validation made the user is added to the system
-    async login() {
-      await pb.collection("users").authWithOAuth2({ provider: "google" });
-      if (pb.authStore.isValid) {
-        document.getElementById("status").innerHTML = "You are now logged in";
-        connected = true;
-        currentUser=pb.authStore.model;
+    async login(email, password) {
+      try {
+        await pb.auth.login(email, password);
+        if (pb.authStore.isValid) {
+          // Authentification réussie avec un email/mot de passe
+          document.getElementById("status").innerHTML = "You are now logged in with email and password";
+          connected = true;
+          currentUser = pb.authStore.model;
+        }
+      } catch (error) {
+        alert("Erreur d'authentification avec email et mot de passe:", error);
       }
-    }/*,
+    },
+    async loginWithGoogle() {
+      try {
+        await pb.auth.loginWithOAuth2({ provider: "google" });
+        if (pb.authStore.isValid) {
+          // Authentification réussie avec Google
+          document.getElementById("status").innerHTML = "You are now logged in with Google";
+          connected = true;
+          currentUser = pb.authStore.model;
+        }
+      } catch (error) {
+        alert("Erreur d'authentification avec Google:", error);
+      }
+    },
+    async loginWithGitHub() {
+      try {
+        await pb.auth.loginWithOAuth2({ provider: "github" });
+        if (pb.authStore.isValid) {
+          // Authentification réussie avec GitHub
+          document.getElementById("status").innerHTML = "You are now logged in with GitHub";
+          connected = true;
+          currentUser = pb.authStore.model;
+        }
+      } catch (error) {
+        alert("Erreur d'authentification avec GitHub:", error);
+      }
+    }
+    /*,
     async add() {
       const record = await pb.collection("poems").create({
         title: "good year",
