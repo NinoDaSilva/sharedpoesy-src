@@ -190,7 +190,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 a,
 .green {
   text-decoration: none;
