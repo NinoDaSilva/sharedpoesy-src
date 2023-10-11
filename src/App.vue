@@ -142,19 +142,23 @@ export default {
     },
     async fetchPoems() {
       //call a request filtering all accessible poems
-      let nbrPoems = 0;
-      let index = 0;
-      const records = await pb.collection("poems").request({ filter: { private: false } });
-      //extract the number of readable poems
-      nbrPoems = records.length;
+      var poemsList = await pb.collection('poems').getList(1, 50, { filter: 'email = "'+ currentUser.email+'" || private = false', });  //extract the number of readable poems
+      nbrPoems = poemsList.length;
+      //number of readable poems
+      var nbrPoems = poemsList.length;
+      //then display the first one
       //if the number of readable poems is not null
-      if(nbrPoems > 0) {
-        //then display the first one
-        document.getElementById('poemtitle').innerHTML=title;
-        document.getElementById('poemcontent').value=content;
-        document.getElementById('poemillustration').src=illustration;
-        //store the indexof the currently displayed poem
-        index = index(records);
+      if(nbrPoems > 0){
+        document.getElementById('poemtitle').innerHTML=poemsList[0].title;
+        document.getElementById('poemcontent').value=poemsList[0].content;
+        document.getElementById('poemillustration').src=poemsList[0].illustration;
+      }
+      if(nbrPoems < - 1) {
+          nbrPoems ++;
+          document.getElementById('poemtitle').innerHTML=poemsList[nbrPoems].title;
+          document.getElementById('poemcontent').value=poemsList[nbrPoems].content;
+          document.getElementById('poemillustration').src=poemsList[nbrPoems].illustration;
+        }
       }
     },
     //this method allows the already registred user to log in the system.
