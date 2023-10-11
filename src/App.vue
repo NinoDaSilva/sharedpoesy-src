@@ -47,9 +47,9 @@ export default {
   methods: {
     //this method allows a new user to sign up the system. Once done, the user receives an email
     //asking for account validation. Once the validation made the user is added to the system
-    async login(email, password) {
+    async login() {
       try {
-        await pb.collection('users').authWithPassword(email, password);
+        await pb.collection('users').authWithPassword();
         if (pb.authStore.isValid) {
           // Authentification réussie avec un email/mot de passe
           document.getElementById("status").innerHTML = "You are now logged in with email and password";
