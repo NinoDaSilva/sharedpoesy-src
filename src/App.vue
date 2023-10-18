@@ -121,7 +121,7 @@ Your poem language here ...
   var connected = false;
   var pocketbase_ip = "";
   //if (import.meta.env.MODE === "production")
-  pocketbase_ip = "https://sharedpoesy.kujundzic.fr:443";
+  pocketbase_ip = "https://sharedpoesy.nino-da-silva.fr:443";
   //else pocketbase_ip = "http://127.0.0.1:8090";
   const pb = new PocketBase(pocketbase_ip);
   var currentUser;
