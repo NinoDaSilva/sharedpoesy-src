@@ -62,18 +62,7 @@ Your poem here ...
         placeholder="edit me"
       /><br />
       <label>Poem's language</label><br />
-      <textarea
-        required
-        name="text"
-        id="text"
-        placeholder="edit me"
-        rows="10"
-        cols="50"
-      >
-Your poem language here ...
-      </textarea>
       <br />
-
 
 
       <label>Illustration: </label>
@@ -117,7 +106,10 @@ Your poem language here ...
 </template>
 
 <script>
-  var poemsList;
+  import { ref } from 'vue';
+
+  const currentPoemIndex = ref(0);
+
   var connected = false;
   var pocketbase_ip = "";
   //if (import.meta.env.MODE === "production")
@@ -197,33 +189,52 @@ Your poem language here ...
           langue: document.getElementById("langue").value,
         });
       },
+
       async fetchPoems() {
-        //call a request filtering all accessible poems
-        poemsList = await pb.collection('poems').getList(1, 50, { filter: 
-        'email = "’+ currentUser.email+’" || private = false', });
-        //extract the number of readable poems
-        nbpoems = poemsList.length;
-        //if the number of readable poems is not null
-        if(nbpoems>0){
-        //then display the first one
-        document.getElementById('poemtitle').innerHTML=poemsList[0].title;
-        document.getElementById('poemcontent').value=poemsList[0].content;
-        document.getElementById('poemillustration').src=poemsList[0].illustration;
+        const response = await pb.collection('poems').getList(1, 50, { filter: 'email = "' + currentUser.email + '" || private = false' });
+        
+        // Check if the response contains items
+        if (response && response.items && response.items.length > 0) {
+          // Assuming that `response.items` is an array of poems
+          const firstPoem = response.items[0];
+
+          // Update your HTML elements with the data from the first poem
+          document.getElementById('poemtitle').innerHTML = firstPoem.title;
+          document.getElementById('poemlangue').innerHTML = firstPoem.langue;
+          document.getElementById('poemcontent').value = firstPoem.content;
+          
+          // The "illustration" property appears to be a file path or URL.
+          // You can set the "src" attribute of an image element to display it.
+          // document.getElementById('poemillustration').src = firstPoem.illustration;
+
+          document.getElementById('poemillustration').src = `https://sharedpoesy.nino-da-silva.fr/api/files/poems/${firstPoem.id}/${firstPoem.illustration}`;
+          
+          // You may want to store the index of the currently displayed poem here.
         }
         //store the indexof the currently displayed poem
-        currentPoem=0;
+        currentPoem = 0;
       },
       //this method allows the already registred user to log in the system.
-    },
-    nextPoem() {
-      //if the current displayed poem is not the last  
-      //then
-      //skip to the next poem
-      //and display the new current poem
-      //document.getElementById('poemtitle').innerHTML=
-      //document.getElementById('poemcontent').value=
-      //document.getElementById('poemillustration').src=
-    },
+
+      async nextPoem() {
+        currentPoemIndex.value = currentPoemIndex.value + 1;
+        console.log(currentPoemIndex.value);
+        const response2 = await pb.collection('poems').getList(1, 50, { filter: 'email = "' + currentUser.email + '" || private = false' });
+      
+        // Vérifiez que this.response est défini et contient des éléments.
+    
+        // Vérifiez si l'index actuel est inférieur à la longueur du tableau d'éléments.
+        if (response2 && response2.items && response2.items.length > 0) {
+          const nextPoem = response2.items[currentPoemIndex.value];
+
+          // Mettez à jour vos éléments HTML avec les données du poème suivant.
+          document.getElementById('poemtitle').innerHTML = nextPoem.title;
+          document.getElementById('poemlangue').innerHTML = nextPoem.langue;
+          document.getElementById('poemcontent').value = nextPoem.content;
+          document.getElementById('poemillustration').src = `https://sharedpoesy.nino-da-silva.fr/api/files/poems/${nextPoem.id}/${nextPoem.illustration}`;
+        }
+      },
+    }
   };
 </script>
 
